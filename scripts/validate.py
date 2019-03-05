@@ -2,20 +2,14 @@ import sys
 import numpy as np
 from itertools import chain
 
-
-# Convert the list of strings into a list of ints
-b = sys.argv[1].split(',')
-boardInt = [int(s) for s in b]
-
-# Now we propagate a 2d array to represent our sudoku board
-axisBoard = [[],[],[],[],[],[],[],[],[]]
-for i in range(81):
-    axisBoard[i%9].append(boardInt[i])
-
-
 # this function returns true if the row or column or sub square is correct
 def is_valid_block(block):
-    return len(block) == 9 and sum(block) == 45
+
+    if(sorted(block) == range(1,10)):
+        return True
+    else:
+        print(block)
+        return False
 
 # Check if the entire board is valid by testing the rows, columns and sub squares
 def is_valid_board(board):
@@ -35,8 +29,32 @@ def is_valid_board(board):
     return True
 
 # Finally we run our main function. The Express server will take any stdout and return that as our response data
-if(is_valid_board(axisBoard)):
-    print("This Puzzle is Solved!")
-else:
-    print("This Puzzle is Not Solved!")
 
+def validate_inputs(board):
+    validNumbers=['1','2','3','4','5','6','7','8','9']
+
+    # Validate Input
+    for cell in board:
+        if(cell == ""):
+            print("a cell is empty")
+            return
+        elif(not cell in validNumbers):
+            print(cell + " is not a number between 1-9")
+            return
+        
+    # Convert all valid entries to int
+    boardInt = [int(s) for s in board]
+
+    # Now we propagate a 2d array to represent our sudoku board
+    axisBoard = [[],[],[],[],[],[],[],[],[]]
+    for i in range(81):
+        axisBoard[i%9].append(boardInt[i])
+
+
+    if(is_valid_board(axisBoard)):
+        print("This Puzzle is Solved!")
+    else:
+        print("This Puzzle is Not Solved!")
+
+b = sys.argv[1].split(',')
+validate_inputs(b)
